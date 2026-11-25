@@ -4,21 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
-  <title>Home | Backoffice</title>
-  <!-- Home es inaccesible: siempre redirige a login (con y sin JavaScript) -->
-  <meta http-equiv="refresh" content="0; url=login.html">
-  <script>
-    window.location.replace("login.html");
-  </script>
+  <title>Proyectos | Backoffice</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Guardia: sin token válido se redirige a login antes de mostrar nada -->
+  <script src="js/api.js"></script>
+  <script>
+    if (!isTokenValid(getToken())) {
+      clearSession();
+      window.location.replace("login.html");
+    }
+  </script>
 </head>
 <body>
-  <main class="home">
-    <section class="card">
-      <h1 class="brand">Backoffice</h1>
-      <p class="subtitle">Bienvenido al panel principal</p>
-      <a class="btn" href="login.html">Ir a iniciar sesión</a>
-    </section>
+  <header class="topbar">
+    <h1 class="topbar__brand">Backoffice</h1>
+    <div class="topbar__user">
+      <span id="user-name">Usuario</span>
+      <button type="button" id="logout-btn" class="btn btn--small btn--ghost">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <div class="dashboard__head">
+      <h2>Mis proyectos</h2>
+      <button type="button" id="add-btn" class="btn btn--small">+ Agregar proyecto</button>
+    </div>
+
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+
+    <p id="empty" class="empty" hidden>Aún no tienes proyectos. ¡Agrega el primero!</p>
+    <section id="projects" class="projects" aria-label="Lista de proyectos"></section>
   </main>
+
+  <dialog id="project-dialog" class="dialog">
+    <form id="project-form">
+      <h2 id="dialog-title">Agregar proyecto</h2>
+
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input type="text" id="title" name="title" minlength="3" maxlength="100" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea id="description" name="description" rows="3" minlength="3" maxlength="1024" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="technologies">Tecnologías (separadas por coma)</label>
+        <input type="text" id="technologies" name="technologies" placeholder="HTML, CSS, JavaScript">
+      </div>
+
+      <div class="form-group">
+        <label for="repository">Repositorio (opcional)</label>
+        <input type="url" id="repository" name="repository" placeholder="https://github.com/usuario/repo" minlength="10" maxlength="300">
+      </div>
+
+      <p id="form-error" class="message message--error" role="alert"></p>
+
+      <div class="dialog__actions">
+        <button type="button" id="cancel-btn" class="btn btn--ghost">Cancelar</button>
+        <button type="submit" class="btn">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/home.js"></script>
 </body>
 </html>
