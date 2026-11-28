@@ -59,7 +59,7 @@ function init() {
       const actions = el("div", "project__actions");
       const edit = el("button", "btn btn--small", "Actualizar");
       edit.type = "button";
-      edit.addEventListener("click", () => openForm(p));
+      edit.addEventListener("click", () => editProject(p));
       const del = el("button", "btn btn--small btn--danger", "Eliminar");
       del.type = "button";
       del.addEventListener("click", () => removeProject(p));
@@ -93,6 +93,15 @@ function init() {
       form.elements.technologies.value = (project.technologies || []).join(", ");
     }
     dialog.showModal();
+  }
+
+  // Lee el proyecto actual desde la API (GET /projects/:id) antes de editarlo
+  async function editProject(project) {
+    try {
+      openForm(await getProjectById(project._id));
+    } catch (error) {
+      showMessage(error.message);
+    }
   }
 
   async function removeProject(project) {

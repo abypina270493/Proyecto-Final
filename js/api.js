@@ -109,6 +109,7 @@ async function loginUser({ email, password }) {
 
 // ---------- Proyectos (protegidos) ----------
 const getProjects = () => request("/projects", { auth: true });
+const getProjectById = (id) => request(`/projects/${id}`, { auth: true });
 const createProject = (project) => request("/projects", { method: "POST", body: project, auth: true });
 const updateProject = (id, project) => request(`/projects/${id}`, { method: "PUT", body: project, auth: true });
 const deleteProject = (id) => request(`/projects/${id}`, { method: "DELETE", auth: true });
